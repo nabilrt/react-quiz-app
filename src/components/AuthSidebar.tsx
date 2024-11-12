@@ -1,5 +1,4 @@
 import { Link, useLocation } from "react-router-dom";
-import loginImage from "../assets/quiz.png";
 import { useAuth } from "../lib/context/auth-context";
 
 const AuthSidebar = () => {
@@ -8,7 +7,7 @@ const AuthSidebar = () => {
     return (
         <aside className="flex flex-col  h-screen   px-4 py-8 overflow-y-auto bg-white border-r ">
             <a href="#">
-                <img className="w-auto h-6 sm:h-7" src={loginImage} alt="" />
+                <p className="text-center text-xl font-semibold">QUIZZY</p>
             </a>
 
             <div className="flex flex-col justify-between flex-1 mt-6">
