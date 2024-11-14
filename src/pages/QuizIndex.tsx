@@ -32,7 +32,7 @@ const QuizIndex: React.FC = () => {
                         icon to get started.
                     </p>
                 </div>
-                <div className="font-inter grid max-w-screen-2xl mx-auto space-y-8 md:grid md:grid-cols-2 lg:grid-cols-4 md:gap-12 md:space-y-0">
+                <div className="font-inter grid max-w-screen-2xl mt-8 mx-auto space-y-8 md:grid md:grid-cols-2 lg:grid-cols-4 md:gap-12 md:space-y-0">
                     {quizTopics.map((quiz) => (
                         <QuizTopic key={quiz._id} quiz={quiz} />
                     ))}

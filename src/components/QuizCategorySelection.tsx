@@ -7,13 +7,11 @@ import { Category } from "../data/types";
 import ReturnIcon from "../icons/ReturnIcon";
 
 type QuizCategorySelectionProps = {
-    lang: string | undefined;
     quizCategories: Category[]; // Use Category type directly
     startQuiz: (quiz: Category) => void; // Ensure compatibility with startQuiz in QuizPage
 };
 
 const QuizCategorySelection: React.FC<QuizCategorySelectionProps> = ({
-    lang,
     quizCategories,
     startQuiz,
 }) => {
@@ -31,21 +29,26 @@ const QuizCategorySelection: React.FC<QuizCategorySelectionProps> = ({
                 </button>
 
                 <h2 className="mb-4 text-4xl tracking-tight font-extrabold text-gray-900">
-                    Choose from one of the topics of {lang}
+                    Choose from one of the topics
                 </h2>
                 <p className="text-gray-500 sm:text-xl">
                     There are several categories of quizzes that range from
                     Beginner to Advanced Level. Choose based on your expertise.
                 </p>
             </div>
+
             <div className="font-inter grid max-w-screen-2xl mx-auto space-y-8 md:grid md:grid-cols-2 lg:grid-cols-4 md:gap-12 md:space-y-0">
-                {quizCategories.map((quiz, index) => (
-                    <QuizCategoryCard
-                        key={index}
-                        quiz={quiz}
-                        onClick={() => startQuiz(quiz)}
-                    />
-                ))}
+                {quizCategories
+                    .filter(
+                        (quiz) => quiz.questions && quiz.questions.length > 0
+                    )
+                    .map((quiz, index) => (
+                        <QuizCategoryCard
+                            key={index}
+                            quiz={quiz}
+                            onClick={() => startQuiz(quiz)}
+                        />
+                    ))}
             </div>
         </div>
     );

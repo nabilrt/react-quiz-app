@@ -171,7 +171,7 @@ const UserDashboard: React.FC = () => {
     const renderTop5Content = () => {
         if (!top5Data) return null;
 
-        const containerStyle = "h-28 overflow-y-auto"; // Fixed height and scrollable content
+        const containerStyle = "h-44 overflow-y-auto"; // Fixed height and scrollable content
         const contentStyle =
             "flex items-center p-4 bg-gray-100 rounded-lg shadow-md mb-4";
         const iconStyle = "text-blue-500 text-lg mr-3";
@@ -242,24 +242,26 @@ const UserDashboard: React.FC = () => {
                         User Quiz Analytics
                     </h2>
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8 font-manrope">
-                        <div className="p-4 bg-gray-100 rounded shadow">
+                        <div className="p-4 h-24 bg-gray-100 rounded shadow">
                             <h3 className="font-bold mb-1">Total Quizzes</h3>
                             <p>{singleValues?.totalQuizzes}</p>
                         </div>
-                        <div className="p-4 bg-gray-100 rounded shadow">
+                        <div className="p-4 h-24 bg-gray-100 rounded shadow">
                             <h3 className="font-bold mb-1">Average Score</h3>
                             <p>{singleValues?.averageScore}</p>
                         </div>
-                        <div className="p-4 bg-gray-100 rounded shadow">
+                        <div className="p-4 h-24 bg-gray-100 rounded shadow">
                             <h3 className="font-bold mb-1">Overall Accuracy</h3>
                             <p>{singleValues?.overallAccuracy}%</p>
                         </div>
-                        <div className="p-4 bg-gray-100 rounded shadow">
-                            <h3 className="font-bold mb-1">Most Attempted Category</h3>
+                        <div className="p-4 h-24 bg-gray-100 rounded shadow">
+                            <h3 className="font-bold mb-1">
+                                Most Attempted Category
+                            </h3>
                             <p>{singleValues?.mostAttemptedCategory}</p>
                         </div>
                     </div>
-                    <div className="grid grid-cols-2 gap-2 font-lexend">
+                    <div className="grid grid-cols-1 gap-4 font-lexend md:grid-cols-1 lg:grid-cols-1 xl:grid-cols-1 2xl:grid-cols-2  ">
                         <div className="mb-8">
                             <h3 className="text-lg font-semibold mb-2">
                                 Attempts Per Category
@@ -267,7 +269,7 @@ const UserDashboard: React.FC = () => {
                             <Pie
                                 data={attemptsPerCategoryData}
                                 options={{
-                                    responsive: false,
+                                    responsive: true,
                                 }}
                                 height={300}
                                 width={400}
@@ -281,7 +283,7 @@ const UserDashboard: React.FC = () => {
                             <Pie
                                 data={attemptsPerTopicData}
                                 options={{
-                                    responsive: false,
+                                    responsive: true,
                                 }}
                                 height={300}
                                 width={400}
@@ -295,7 +297,7 @@ const UserDashboard: React.FC = () => {
                             <Bar
                                 data={scoreDistributionData}
                                 options={{
-                                    responsive: false,
+                                    responsive: true,
                                 }}
                                 height={250}
                                 width={400}
@@ -308,7 +310,7 @@ const UserDashboard: React.FC = () => {
                             <div className="flex space-x-4 mb-4">
                                 <button
                                     onClick={() => setActiveTab("score")}
-                                    className={`px-4 py-2 ${
+                                    className={`px-4 py-2 h-20 ${
                                         activeTab === "score"
                                             ? "bg-blue-500 text-white"
                                             : "bg-gray-200"
@@ -318,7 +320,7 @@ const UserDashboard: React.FC = () => {
                                 </button>
                                 <button
                                     onClick={() => setActiveTab("attempts")}
-                                    className={`px-4 py-2 ${
+                                    className={`px-4 py-2 h-20 ${
                                         activeTab === "attempts"
                                             ? "bg-blue-500 text-white"
                                             : "bg-gray-200"
@@ -328,7 +330,7 @@ const UserDashboard: React.FC = () => {
                                 </button>
                                 <button
                                     onClick={() => setActiveTab("correct")}
-                                    className={`px-4 py-2 ${
+                                    className={`px-4 py-2 h-20 ${
                                         activeTab === "correct"
                                             ? "bg-blue-500 text-white"
                                             : "bg-gray-200"

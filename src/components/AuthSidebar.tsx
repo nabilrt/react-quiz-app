@@ -1,23 +1,42 @@
-import { Link, useLocation } from "react-router-dom";
+import { LuChevronFirst, LuChevronLast } from "react-icons/lu";
 import { useAuth } from "../lib/context/auth-context";
+import { Link } from "react-router-dom";
 
-const AuthSidebar = () => {
-    let location = useLocation();
+const AuthSidebar = ({ expanded, setExpanded }: any) => {
     const { user, logout } = useAuth();
     return (
-        <aside className="flex flex-col  h-screen   px-4 py-8 overflow-y-auto bg-white border-r ">
-            <a href="#">
-                <p className="text-center text-xl font-semibold">QUIZZY</p>
-            </a>
-
-            <div className="flex flex-col justify-between flex-1 mt-6">
-                <nav>
+        <aside
+            className={`h-screen transition-all duration-300 fixed ease-in-out bg-white border-r shadow-sm ${
+                expanded ? "w-64" : "w-16"
+            }`}
+        >
+            <nav className="h-full flex flex-col bg-white border-r shadow-sm">
+                <div className="p-4 pb-2 flex justify-between items-center">
+                    <a href="#">
+                        <p
+                            className={`text-center text-xl font-semibold overflow-hidden transition-all duration-300 ${
+                                expanded
+                                    ? "w-auto opacity-100"
+                                    : "w-0 opacity-0"
+                            }`}
+                        >
+                            QUIZZY
+                        </p>
+                    </a>
+                    <button
+                        onClick={() => setExpanded((curr:any) => !curr)}
+                        className="p-1.5 rounded-lg bg-gray-50 hover:bg-gray-100"
+                    >
+                        {expanded ? <LuChevronFirst /> : <LuChevronLast />}
+                    </button>
+                </div>
+                <ul className="flex-1 px-3">
                     <Link
-                        className={`flex items-center px-4 py-2 text-gray-600 transition-colors duration-300 transform rounded-md  hover:bg-gray-100  hover:text-gray-700 ${
+                        className={`relative flex items-center py-2 px-3 my-1 font-medium rounded-md cursor-pointer transition-colors group ${
                             location.pathname === "/user/dashboard"
-                                ? "bg-gray-100"
-                                : ""
-                        } rounded-md `}
+                                ? "bg-gradient-to-tr from-indigo-200 to-indigo-100 text-indigo-800"
+                                : "hover:bg-indigo-50 text-gray-600"
+                        }`}
                         to="/user/dashboard"
                     >
                         <svg
@@ -34,15 +53,29 @@ const AuthSidebar = () => {
                                 strokeLinejoin="round"
                             />
                         </svg>
-                        <span className="mx-4 font-medium">Dashboard</span>
+                        <span
+                            className={`overflow-hidden transition-all ${
+                                expanded ? "w-52 ml-3" : "w-0"
+                            }`}
+                        >
+                            Dashboard
+                        </span>
+
+                        {!expanded && (
+                            <div
+                                className={`absolute left-full rounded-md px-2 py-1 ml-6 bg-indigo-100 text-indigo-800 text-sm invisible opacity-20 -translate-x-3 transition-all group-hover:visible group-hover:opacity-100 group-hover:translate-x-0`}
+                            >
+                                Dashboard
+                            </div>
+                        )}
                     </Link>
                     <Link
-                        className={`flex items-center px-4 py-2 mt-5 text-gray-600 transition-colors duration-300 transform rounded-md  hover:bg-gray-100 hover:text-gray-700 ${
+                        className={`relative flex items-center py-2 px-3 my-1 font-medium rounded-md cursor-pointer transition-colors group ${
                             location.pathname.startsWith("/user/quiz")
-                                ? "bg-gray-100"
-                                : ""
+                                ? "bg-gradient-to-tr from-indigo-200 to-indigo-100 text-indigo-800"
+                                : "hover:bg-indigo-50 text-gray-600"
                         }`}
-                        to="/user/quiz"
+                        to={"/user/quiz"}
                     >
                         <svg
                             className="w-5 h-5"
@@ -58,15 +91,29 @@ const AuthSidebar = () => {
                                 strokeLinejoin="round"
                             />
                         </svg>
-                        <span className="mx-4 font-medium">Quiz</span>
+                        <span
+                            className={`overflow-hidden transition-all ${
+                                expanded ? "w-52 ml-3" : "w-0"
+                            }`}
+                        >
+                            Quiz
+                        </span>
+
+                        {!expanded && (
+                            <div
+                                className={`absolute left-full rounded-md px-2 py-1 ml-6 bg-indigo-100 text-indigo-800 text-sm invisible opacity-20 -translate-x-3 transition-all group-hover:visible group-hover:opacity-100 group-hover:translate-x-0`}
+                            >
+                                Quiz
+                            </div>
+                        )}
                     </Link>
                     <Link
-                        className={`flex items-center px-4 py-2 text-gray-600 mt-5 transition-colors duration-300 transform rounded-md  hover:bg-gray-100  hover:text-gray-700 ${
+                        className={`relative flex items-center py-2 px-3 my-1 font-medium rounded-md cursor-pointer transition-colors group ${
                             location.pathname === "/user/settings"
-                                ? "bg-gray-100"
-                                : ""
-                        } rounded-md `}
-                        to="/user/settings"
+                                ? "bg-gradient-to-tr from-indigo-200 to-indigo-100 text-indigo-800"
+                                : "hover:bg-indigo-50 text-gray-600"
+                        }`}
+                        to={"/user/settings"}
                     >
                         <svg
                             className="w-5 h-5"
@@ -89,47 +136,96 @@ const AuthSidebar = () => {
                                 strokeLinejoin="round"
                             />
                         </svg>
-                        <span className="mx-4 font-medium">Settings</span>
-                    </Link>
-                </nav>
-                <div className="flex flex-col gap-2">
-                    <Link
-                        to="/user/profile"
-                        className={`flex items-center px-4 py-2 -mx-2 transform rounded-md  hover:bg-gray-200 hover:text-gray-700 ${
-                            location.pathname === "/user/profile"
-                                ? "bg-gray-100"
-                                : ""
-                        }`}
-                    >
-                        <img
-                            className="object-cover mx-2 rounded-full h-9 w-9"
-                            src={user?.avatar}
-                            alt="avatar"
-                        />
-                        <span className="mx-2 font-medium text-gray-800 ">
-                            {user?.name}
+                        <span
+                            className={`overflow-hidden transition-all ${
+                                expanded ? "w-52 ml-3" : "w-0"
+                            }`}
+                        >
+                            Settings
                         </span>
+
+                        {!expanded && (
+                            <div
+                                className={`absolute left-full rounded-md px-2 py-1 ml-6 bg-indigo-100 text-indigo-800 text-sm invisible opacity-20 -translate-x-3 transition-all group-hover:visible group-hover:opacity-100 group-hover:translate-x-0`}
+                            >
+                                Settings
+                            </div>
+                        )}
                     </Link>
-                    <button
-                        onClick={logout}
-                        className={`flex items-center px-4 py-2 -mx-2 transform rounded-md  hover:bg-gray-200 hover:text-gray-700`}
+                    <Link
+                        className={`relative flex items-center py-2 px-3 my-1 font-medium rounded-md cursor-pointer transition-colors group ${
+                            location.pathname === "/user/profile"
+                                ? "bg-gradient-to-tr from-indigo-200 to-indigo-100 text-indigo-800"
+                                : "hover:bg-indigo-50 text-gray-600"
+                        }`}
+                        to="/user/profile"
                     >
                         <svg
-                            xmlns="http://www.w3.org/2000/svg"
+                            className="w-5 h-5"
                             viewBox="0 0 24 24"
-                            fill="currentColor"
-                            className="w-6 h-6"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
                         >
-                            <path d="M16.24 7.75a.75.75 0 0 1 1.06 1.06l-3.72 3.72h8.91a.75.75 0 0 1 0 1.5h-8.91l3.72 3.72a.75.75 0 1 1-1.06 1.06l-5.25-5.25a.75.75 0 0 1 0-1.06l5.25-5.25Z" />
-                            <path d="M9.25 3a.75.75 0 0 1 .75.75v16.5a.75.75 0 0 1-1.5 0V3.75a.75.75 0 0 1 .75-.75Z" />
+                            <path
+                                d="M12 12c2.761 0 5-2.239 5-5s-2.239-5-5-5-5 2.239-5 5 2.239 5 5 5z"
+                                stroke="currentColor"
+                                strokeWidth="2"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                            />
+                            <path
+                                d="M4 20c0-3.314 2.686-6 6-6h4c3.314 0 6 2.686 6 6"
+                                stroke="currentColor"
+                                strokeWidth="2"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                            />
                         </svg>
 
-                        <span className="mx-2 font-medium text-gray-800 ">
-                            Logout
+                        <span
+                            className={`overflow-hidden transition-all ${
+                                expanded ? "w-52 ml-3" : "w-0"
+                            }`}
+                        >
+                            Profile
                         </span>
-                    </button>
+
+                        {!expanded && (
+                            <div
+                                className={`absolute left-full rounded-md px-2 py-1 ml-6 bg-indigo-100 text-indigo-800 text-sm invisible opacity-20 -translate-x-3 transition-all group-hover:visible group-hover:opacity-100 group-hover:translate-x-0`}
+                            >
+                                Profile
+                            </div>
+                        )}
+                    </Link>
+                </ul>
+                <div className="border-t flex p-3">
+                    <img src={user?.avatar} className="w-10 h-10 rounded-md" />
+                    <div
+                        className={`flex justify-between items-center overflow-hidden transition-all ${
+                            expanded ? "w-52 ml-3" : "w-0"
+                        } `}
+                    >
+                        <div className="leading-4">
+                            <h4 className="font-semibold">{user?.name}</h4>
+                        </div>
+                        <button
+                            onClick={logout}
+                            className={`flex items-center px-2 py-2 -mx-2 transform rounded-md  hover:bg-gray-200 hover:text-gray-700`}
+                        >
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                viewBox="0 0 24 24"
+                                fill="currentColor"
+                                className="w-6 h-6"
+                            >
+                                <path d="M16.24 7.75a.75.75 0 0 1 1.06 1.06l-3.72 3.72h8.91a.75.75 0 0 1 0 1.5h-8.91l3.72 3.72a.75.75 0 1 1-1.06 1.06l-5.25-5.25a.75.75 0 0 1 0-1.06l5.25-5.25Z" />
+                                <path d="M9.25 3a.75.75 0 0 1 .75.75v16.5a.75.75 0 0 1-1.5 0V3.75a.75.75 0 0 1 .75-.75Z" />
+                            </svg>
+                        </button>
+                    </div>
                 </div>
-            </div>
+            </nav>
         </aside>
     );
 };

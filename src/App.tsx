@@ -24,7 +24,7 @@ function App() {
                         <Route path="quiz" element={<QuizIndex />} />
                         <Route path="profile" element={<ProfilePage />} />
                         <Route path="settings" element={<SettingsPage />} />
-                        <Route path="quiz/:lang" element={<QuizPage />} />
+                        <Route path="quiz/:id" element={<QuizPage />} />
                     </Route>
                 </Routes>
             </AuthContextProvider>

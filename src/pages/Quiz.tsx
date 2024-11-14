@@ -12,11 +12,17 @@ import { getQuizByTopic, storeQuizRecord } from "../lib/api";
 import { useAuth } from "../lib/context/auth-context";
 
 type Params = {
-    lang: string;
+    id: string;
+};
+const shuffleArray = <T,>(array: T[]): T[] => {
+    return array
+        .map((value) => ({ value, sort: Math.random() }))
+        .sort((a, b) => a.sort - b.sort)
+        .map(({ value }) => value);
 };
 
 const QuizPage: React.FC = () => {
-    const { lang } = useParams<Params>();
+    const { id } = useParams<Params>();
     const [quizCategories, setQuizCategories] = useState<Category[]>([]);
     const [quizId, setQuizId] = useState<string | null>("");
 
@@ -33,7 +39,7 @@ const QuizPage: React.FC = () => {
             setLoading(true);
             setError(null);
             try {
-                const response = await getQuizByTopic(lang);
+                const response = await getQuizByTopic(id);
                 setQuizCategories(response.data.categories);
                 setQuizId(response.data._id);
             } catch (err: any) {
@@ -45,7 +51,7 @@ const QuizPage: React.FC = () => {
         };
 
         fetchQuizCategories();
-    }, [lang]);
+    }, [id]);
 
     useEffect(() => {
         let interval: any;
@@ -70,7 +76,13 @@ const QuizPage: React.FC = () => {
     }, [currentQuestionIndex, selectedQuiz, isQuizComplete]);
 
     const startQuiz = (quiz: Category) => {
-        setSelectedQuiz(quiz);
+        const shuffledQuestions = shuffleArray(quiz.questions).map(
+            (question) => ({
+                ...question,
+                options: shuffleArray(question.options),
+            })
+        );
+        setSelectedQuiz({ ...quiz, questions: shuffledQuestions });
         setCurrentQuestionIndex(0);
         setAnswers({});
     };
@@ -198,7 +210,6 @@ const QuizPage: React.FC = () => {
             {!selectedQuiz && !isQuizComplete && (
                 <section className="bg-white">
                     <QuizCategorySelection
-                        lang={lang}
                         quizCategories={quizCategories}
                         startQuiz={startQuiz}
                     />
