@@ -89,3 +89,34 @@ export const getUserAnalytics = async () => {
         throw new Error(error.message);
     }
 };
+
+export const getLeaderboardData = async (
+    topic_category: string | undefined
+) => {
+    try {
+        const response = await axios.get(
+            `/quiz-record/leaderboard/${topic_category}`
+        );
+        return response;
+    } catch (error: any) {
+        throw new Error(error.message);
+    }
+};
+
+export const addIssue = async (data: any) => {
+    try {
+        const response = await axios.post("/issue/add", data);
+        return response;
+    } catch (error: any) {
+        throw new Error(error.message);
+    }
+};
+
+export const showAllIssues= async () => {
+    try {
+        const response = await axios.get(`/issue/all`);
+        return response;
+    } catch (error: any) {
+        throw new Error(error.message);
+    }
+};

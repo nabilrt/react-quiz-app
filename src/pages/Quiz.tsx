@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { quiz_data } from "../data/data"; // Assume quiz_data is typed as Quiz[]
 import { Quiz, Category } from "../data/types"; // Import types if placed in a separate file
 import OptionCard from "../components/OptionCard";
@@ -8,8 +8,11 @@ import TimerProgress from "../components/TimerProgress";
 import ReturnIcon from "../icons/ReturnIcon";
 import CrossIcon from "../icons/CrossIcon";
 import ScoreSection from "../components/ScoreSection";
-import { getQuizByTopic, storeQuizRecord } from "../lib/api";
+import { addIssue, getQuizByTopic, storeQuizRecord } from "../lib/api";
 import { useAuth } from "../lib/context/auth-context";
+import { RxCross1 } from "react-icons/rx";
+import { SubmitHandler, useForm } from "react-hook-form";
+import { MdOutlineInfo } from "react-icons/md";
 
 type Params = {
     id: string;
@@ -20,18 +23,24 @@ const shuffleArray = <T,>(array: T[]): T[] => {
         .sort((a, b) => a.sort - b.sort)
         .map(({ value }) => value);
 };
-
+type FormValues = {
+    title: string;
+    description: string;
+};
 const QuizPage: React.FC = () => {
     const { id } = useParams<Params>();
     const [quizCategories, setQuizCategories] = useState<Category[]>([]);
     const [quizId, setQuizId] = useState<string | null>("");
-
+    const [quizTopic, setQuizTopic] = useState<string | null>("");
+    const [isModalOpen, setisModalOpen] = useState(false);
+    const { register, handleSubmit, reset } = useForm<FormValues>();
     const [selectedQuiz, setSelectedQuiz] = useState<Category | null>(null);
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState<number>(0);
     const [answers, setAnswers] = useState<{ [key: number]: string[] }>({});
     const [isQuizComplete, setIsQuizComplete] = useState<boolean>(false);
     const [timer, setTimer] = useState<number>(15); // Timer for each question
     const [loading, setLoading] = useState<boolean>(true);
+    const [issueLoading, setIssueLoading] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
@@ -42,6 +51,7 @@ const QuizPage: React.FC = () => {
                 const response = await getQuizByTopic(id);
                 setQuizCategories(response.data.categories);
                 setQuizId(response.data._id);
+                setQuizTopic(response.data.topic);
             } catch (err: any) {
                 setError("Failed to load quiz categories. Please try again.");
                 console.error("Error fetching quiz categories:", err.message);
@@ -189,6 +199,38 @@ const QuizPage: React.FC = () => {
             console.log("Quiz record saved:", response.data);
         } catch (error) {
             console.error("Error saving quiz record:", error);
+        }
+    };
+
+    const closeModal = () => {
+        reset();
+        setisModalOpen(false);
+    };
+
+    const [message, setMessage] = useState("");
+
+    const onSubmit: SubmitHandler<FormValues> = async (data) => {
+        setIssueLoading(true);
+        const updatedData = {
+            ...data,
+            quizId: quizId,
+            categoryId: selectedQuiz?._id,
+        };
+
+        try {
+            await addIssue(updatedData);
+            setMessage("Issue Submitted Successfully!");
+
+            setIssueLoading(false);
+        } catch (error) {
+            setMessage("Issue Failed to Submit!");
+            setIssueLoading(false);
+            console.error("Error submitting form:", error);
+        } finally {
+            setTimeout(() => {
+                setMessage("");
+            }, 2000);
+            closeModal();
         }
     };
 
@@ -351,18 +393,101 @@ const QuizPage: React.FC = () => {
                                 </div>
                             );
                         })}
-                        <button
-                            onClick={() => {
-                                setIsQuizComplete(false);
-                                setSelectedQuiz(null);
-                            }}
-                            className="mt-8 text-white bg-blue-500 hover:bg-blue-600 font-medium rounded-lg text-sm px-5 py-2.5"
-                        >
-                            Back to Categories
-                        </button>
+                        <div className="mt-2 flex gap-2">
+                            <button
+                                onClick={() => {
+                                    setIsQuizComplete(false);
+                                    setSelectedQuiz(null);
+                                }}
+                                className="mt-8 text-white bg-blue-500 hover:bg-blue-600 font-medium rounded-lg text-sm px-5 py-2.5"
+                            >
+                                Back to Categories
+                            </button>
+                            <Link
+                                to={`/user/leaderboard?type=${quizTopic} - ${selectedQuiz?.category}`}
+                                className="mt-8 text-white bg-emerald-500 hover:bg-emerald-700 font-medium rounded-lg text-sm px-5 py-2.5"
+                            >
+                                Go to Leaderboard
+                            </Link>
+                            <button
+                                onClick={() => setisModalOpen(true)}
+                                className="mt-8 text-white bg-pink-600 hover:bg-pink-800 font-medium rounded-lg text-sm px-5 py-2.5"
+                            >
+                                Having Issues? Click to Report!
+                            </button>
+                        </div>
                     </div>
                 </section>
             )}
+
+            <div
+                className={`${
+                    isModalOpen ? " visible" : " invisible"
+                } w-full h-screen fixed top-0 left-0 z-50 bg-[#0000002a] transition-all duration-300 flex items-center justify-center`}
+            >
+                <div
+                    className={`${
+                        isModalOpen
+                            ? " scale-[1] opacity-100"
+                            : " scale-[0] opacity-0"
+                    } w-[90%] md:w-[80%] lg:w-[35%] bg-[#fff] rounded-lg transition-all duration-300 mx-auto mt-8`}
+                >
+                    <div className="w-full flex items-end p-4 justify-between ">
+                        <h1 className="text-[1.5rem] font-bold">
+                            Create Issue
+                        </h1>
+                        <button
+                            className="p-2 text-[2.5rem] hover:bg-[#e7e7e7] rounded-full transition-all duration-300 cursor-pointer"
+                            onClick={closeModal}
+                            disabled={issueLoading}
+                        >
+                            <RxCross1 size={15} />
+                        </button>
+                    </div>
+                    <form
+                        className="flex flex-col gap-5 p-4"
+                        onSubmit={handleSubmit(onSubmit)}
+                    >
+                        {message !== "" && (
+                            <div className="p-3 flex items-center gap-3 bg-[#e5f6fd] rounded mt-2 mb-2">
+                                <MdOutlineInfo className="text-[#2d9dda] text-[1.5rem]" />
+                                <p className="text-[#2d9dda] text-[1rem]">
+                                    {message}
+                                </p>
+                            </div>
+                        )}
+
+                        <label htmlFor="topic">Title</label>
+                        <input
+                            type="text"
+                            id="topic"
+                            placeholder="Quiz Topic"
+                            {...register("title", { required: true })}
+                            className="border-[#e5eaf2] border rounded-md outline-none px-4 w-full mt-1 py-3 focus:border-[#3B9DF8] transition-colors duration-300"
+                        />
+
+                        {/* Description */}
+                        <label htmlFor="description">Description</label>
+                        <textarea
+                            id="description"
+                            placeholder="Write issue about the quiz"
+                            {...register("description", {
+                                required: true,
+                            })}
+                            className="border-[#e5eaf2] border rounded-md outline-none mt-1 px-4 w-full py-3 min-h-[200px] focus:border-[#3B9DF8] transition-colors duration-300"
+                        ></textarea>
+
+                        <div className="flex gap-2">
+                            <button
+                                type="submit"
+                                className="py-2 px-4 w-full bg-emerald-400 hover:bg-emerald-600 text-[#fff] rounded-md"
+                            >
+                                <>{issueLoading ? "Loading" : "Create Issue"}</>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
     );
 };

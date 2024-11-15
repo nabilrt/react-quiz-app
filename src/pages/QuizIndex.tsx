@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { getAllQuizzes } from "../lib/api/index"; // Replace with actual path to your API
 import { Quiz } from "../data/types"; // Import the Quiz type
 import QuizTopic from "../components/QuizTopic";
+import NoContent from "../components/NoContent";
 
 const QuizIndex: React.FC = () => {
     const [quizTopics, setQuizTopics] = useState<Quiz[]>([]);
@@ -32,8 +33,19 @@ const QuizIndex: React.FC = () => {
                         icon to get started.
                     </p>
                 </div>
+                {quizTopics.length === 0 && (
+                    <NoContent>
+                        <h1 className="text-[1.4rem] mt-6 font-[500] text-black">
+                            No Topics Found
+                        </h1>
+
+                        <p className="text-[0.9rem] text-gray-500">
+                            Please wait until admin adds new topics for quiz
+                        </p>
+                    </NoContent>
+                )}
                 <div className="font-inter grid max-w-screen-2xl mt-8 mx-auto space-y-8 md:grid md:grid-cols-2 lg:grid-cols-4 md:gap-12 md:space-y-0">
-                    {quizTopics.map((quiz) => (
+                    {quizTopics?.map((quiz) => (
                         <QuizTopic key={quiz._id} quiz={quiz} />
                     ))}
                 </div>
