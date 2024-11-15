@@ -13,6 +13,7 @@ import UserDashboard from "./pages/Dashboard";
 import NotFoundPage from "./pages/NotFoundPage";
 import Leaderboard from "./pages/Leaderboard";
 import IssuesPage from "./pages/Issues";
+import Testimonial from "./pages/Testimonial";
 
 function App() {
     return (
@@ -29,6 +30,7 @@ function App() {
                         <Route path="settings" element={<SettingsPage />} />
                         <Route path="leaderboard" element={<Leaderboard />} />
                         <Route path="issues" element={<IssuesPage />} />
+                        <Route path="testimonial" element={<Testimonial />} />
                         <Route path="quiz/:id" element={<QuizPage />} />
                         <Route path="*" element={<NotFoundPage />} />
                     </Route>

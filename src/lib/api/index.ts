@@ -112,9 +112,33 @@ export const addIssue = async (data: any) => {
     }
 };
 
-export const showAllIssues= async () => {
+export const showIssuesByUser = async (user_id: string | undefined) => {
     try {
-        const response = await axios.get(`/issue/all`);
+        const response = await axios.get(`/issue/user/${user_id}`);
+        return response;
+    } catch (error: any) {
+        throw new Error(error.message);
+    }
+};
+
+export const showUserTestimonial = async (user_id: string | undefined) => {
+    try {
+        const response = await axios.get(`/testimonial/user/${user_id}`);
+        return response;
+    } catch (error: any) {
+        throw new Error(error.message);
+    }
+};
+
+export const createOrUpdateTestimonialByUserId = async (
+    user_id: string | undefined,
+    data: any
+) => {
+    try {
+        const response = await axios.post(
+            `/testimonial/upsert/${user_id}`,
+            data
+        );
         return response;
     } catch (error: any) {
         throw new Error(error.message);
