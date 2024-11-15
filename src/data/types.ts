@@ -23,3 +23,23 @@ export interface Quiz {
     logo: string;
     categories: Category[];
 }
+
+export interface User {
+    _id: string;
+    name: string;
+    email: string;
+    avatar: string;
+    role: string;
+    createdAt: string;
+    updatedAt: string;
+    privacy: boolean;
+}
+
+export interface Testimonial {
+    _id: string;
+    userId: User; // Nested user object
+    rating: number;
+    status: boolean;
+    text: string;
+    createdAt: string;
+}

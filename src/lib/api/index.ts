@@ -144,3 +144,48 @@ export const createOrUpdateTestimonialByUserId = async (
         throw new Error(error.message);
     }
 };
+
+export const getAllMessages = async () => {
+    try {
+        const response = await axios.get(`/chat/all`);
+        return response;
+    } catch (error: any) {
+        throw new Error(error.message);
+    }
+};
+
+export const sendMessage = async (data: any) => {
+    try {
+        const response = await axios.post(`/chat/send`, data);
+        return response;
+    } catch (error: any) {
+        throw new Error(error.message);
+    }
+};
+
+export const getUserAnalyticsCommunity = async (id: string | undefined) => {
+    try {
+        const response = await axios.get(`/quiz-record/analytics/${id}`);
+        return response;
+    } catch (error: any) {
+        throw new Error(error.message);
+    }
+};
+
+export const updateUserPrivacyStatus = async () => {
+    try {
+        const response = await axios.post(`/user/update-privacy`);
+        return response;
+    } catch (error: any) {
+        throw new Error(error.message);
+    }
+};
+
+export const getActiveTestimonials = async () => {
+    try {
+        const response = await axios.get(`/testimonial/active`);
+        return response;
+    } catch (error: any) {
+        throw new Error(error.message);
+    }
+};

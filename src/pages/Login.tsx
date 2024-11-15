@@ -77,14 +77,6 @@ const Login = () => {
                                 >
                                     Password
                                 </label>
-                                <div className="text-sm">
-                                    <a
-                                        href="#"
-                                        className="font-semibold text-indigo-600 hover:text-indigo-500"
-                                    >
-                                        Forgot password?
-                                    </a>
-                                </div>
                             </div>
                             <div className="mt-2">
                                 <input
@@ -120,9 +112,30 @@ const Login = () => {
                         <div>
                             <button
                                 type="submit"
-                                className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                                className="relative inline-flex items-center justify-center px-6 py-2.5 overflow-hidden font-medium text-primary transition duration-300 ease-out border-2 border-primary rounded-full shadow-md group w-full mt-2"
                             >
-                                {loginLoader ? "Loading..." : "Sign in"}
+                                <span className="absolute inset-0 flex items-center justify-center w-full h-full text-white duration-300 -translate-x-full bg-primary group-hover:translate-x-0 ease">
+                                    <svg
+                                        className="w-6 h-6"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        viewBox="0 0 24 24"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                    >
+                                        <path
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            stroke-width="2"
+                                            d="M14 5l7 7m0 0l-7 7m7-7H3"
+                                        ></path>
+                                    </svg>
+                                </span>
+                                <span className="absolute flex items-center justify-center w-full h-full text-primary transition-all duration-300 transform group-hover:translate-x-full ease">
+                                    {loginLoader ? "Loading..." : "Sign in"}
+                                </span>
+                                <span className="relative invisible">
+                                    {loginLoader ? "Loading..." : "Sign in"}
+                                </span>
                             </button>
                         </div>
                     </form>
@@ -131,7 +144,7 @@ const Login = () => {
                         Not a member?{" "}
                         <Link
                             to="/register"
-                            className="font-semibold text-indigo-600 hover:text-indigo-500"
+                            className="font-semibold text-primary hover:text-indigo-500"
                         >
                             Create an account
                         </Link>

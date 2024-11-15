@@ -14,6 +14,7 @@ import NotFoundPage from "./pages/NotFoundPage";
 import Leaderboard from "./pages/Leaderboard";
 import IssuesPage from "./pages/Issues";
 import Testimonial from "./pages/Testimonial";
+import CommunityChat from "./pages/CommunityChat";
 
 function App() {
     return (
@@ -31,6 +32,7 @@ function App() {
                         <Route path="leaderboard" element={<Leaderboard />} />
                         <Route path="issues" element={<IssuesPage />} />
                         <Route path="testimonial" element={<Testimonial />} />
+                        <Route path="community-chat" element={<CommunityChat />} />
                         <Route path="quiz/:id" element={<QuizPage />} />
                         <Route path="*" element={<NotFoundPage />} />
                     </Route>

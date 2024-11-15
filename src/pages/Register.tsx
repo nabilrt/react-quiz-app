@@ -1,7 +1,7 @@
 import { useRef, useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { CgProfile } from "react-icons/cg";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import Header from "../components/Header";
 import { registerUser } from "../lib/api";
 
@@ -68,9 +68,7 @@ const Register = () => {
 
     return (
         <div>
-            <div className="font-manrope shadow-[0px_12px_6px_0px_rgba(0,_0,_0,_0.1)] w-full mb-4 ">
-                <Header />
-            </div>
+            <Header />
 
             <div className="font-inter container mx-auto py-8 px-4 sm:px-6 md:px-8">
                 <h1 className="text-2xl md:text-3xl font-bold mb-6 text-center">
@@ -203,10 +201,45 @@ const Register = () => {
                     </div>
 
                     <button
-                        className="w-full bg-indigo-500 text-white text-sm font-bold py-2 px-4 rounded-md hover:bg-indigo-600 transition duration-300 mt-4"
+                        className="relative inline-flex items-center justify-start py-3 pl-4 pr-12 overflow-hidden font-semibold text-primary transition-all duration-150 ease-in-out rounded hover:pl-10 hover:pr-6 bg-gray-50 group w-full mt-4"
                         type="submit"
                     >
-                        {loading ? "Loading..." : "Register"}
+                        <span className="absolute bottom-0 left-0 w-full h-1 transition-all duration-150 ease-in-out bg-primary group-hover:h-full"></span>
+                        <span className="absolute right-0 pr-4 duration-200 ease-out group-hover:translate-x-12">
+                            <svg
+                                className="w-5 h-5 text-green-400"
+                                fill="none"
+                                stroke="#3B9DF8"
+                                viewBox="0 0 24 24"
+                                xmlns="http://www.w3.org/2000/svg"
+                            >
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    stroke-width="2"
+                                    d="M14 5l7 7m0 0l-7 7m7-7H3"
+                                ></path>
+                            </svg>
+                        </span>
+                        <span className="absolute left-0 pl-2.5 -translate-x-12 group-hover:translate-x-0 ease-out duration-200">
+                            <svg
+                                className="w-5 h-5 text-green-400"
+                                fill="none"
+                                stroke="#fff"
+                                viewBox="0 0 24 24"
+                                xmlns="http://www.w3.org/2000/svg"
+                            >
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    stroke-width="2"
+                                    d="M14 5l7 7m0 0l-7 7m7-7H3"
+                                ></path>
+                            </svg>
+                        </span>
+                        <span className="relative w-full text-left transition-colors duration-200 ease-in-out group-hover:text-white">
+                            {loading ? "Loading..." : "Register"}
+                        </span>
                     </button>
                 </form>
             </div>
