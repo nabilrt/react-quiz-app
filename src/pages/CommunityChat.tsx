@@ -287,20 +287,20 @@ const CommunityChat: React.FC = () => {
                                             : msg.userId.avatar
                                     }
                                     alt={msg.userId.name}
-                                    className="w-8 h-8 rounded-full mr-2 cursor-pointer"
+                                    className="w-8 h-8 sm:w-10 sm:h-10 rounded-full mr-2 cursor-pointer"
                                     onClick={() => handleUserClick(msg.userId)}
                                 />
                                 {/* Show active icon if user is in activeUsers */}
                                 {activeUsers?.includes(msg.userId._id) && (
                                     <span
-                                        className="absolute bottom-0 right-0 w-2 h-2 bg-green-500 rounded-full border border-white"
+                                        className="absolute bottom-0 right-0 w-2 h-2 sm:w-3 sm:h-3 bg-green-500 rounded-full border border-white"
                                         title="Active"
                                     ></span>
                                 )}
                             </div>
                         )}
                         <div
-                            className={`p-2 rounded-lg ${
+                            className={`p-2 sm:p-3 rounded-lg ${
                                 msg.userId._id === user?._id
                                     ? "bg-blue-500 text-white"
                                     : "bg-gray-200 text-black"
@@ -308,7 +308,7 @@ const CommunityChat: React.FC = () => {
                         >
                             {msg.userId._id !== user?._id && (
                                 <p
-                                    className="text-sm font-medium cursor-pointer"
+                                    className="text-sm sm:text-base font-medium cursor-pointer"
                                     onClick={() => handleUserClick(msg.userId)}
                                 >
                                     {msg.userId.privacy
@@ -317,8 +317,10 @@ const CommunityChat: React.FC = () => {
                                 </p>
                             )}
 
-                            <p className="text-sm">{msg.message}</p>
-                            <span className="text-xs text-gray-500">
+                            <p className="text-sm sm:text-base">
+                                {msg.message}
+                            </p>
+                            <span className="text-xs sm:text-sm text-gray-500">
                                 {new Date(msg.createdAt).toLocaleTimeString()}
                             </span>
                         </div>
@@ -332,83 +334,90 @@ const CommunityChat: React.FC = () => {
                     placeholder="Type your message..."
                     value={newMessage}
                     onChange={(e) => setNewMessage(e.target.value)}
-                    className="flex-1 p-2 border rounded-l-md"
+                    className="flex-1 p-2 sm:p-3 border rounded-l-md text-sm sm:text-base"
                 />
                 <button
                     onClick={handleSendMessage}
-                    className="p-2 bg-blue-500 text-white rounded-r-md hover:bg-blue-600"
+                    className="p-2 sm:p-3 bg-blue-500 text-white rounded-r-md hover:bg-blue-600"
                 >
                     <FaPaperPlane />
                 </button>
             </div>
             {showModal && selectedUserAnalytics && selectedUser && (
                 <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-                    <div className="bg-white rounded-lg p-6 w-full max-w-4xl">
+                    <div className="bg-white rounded-lg p-6 w-full max-w-lg sm:max-w-xl lg:max-w-4xl mx-4 sm:mx-8 lg:mx-auto overflow-y-auto max-h-screen">
                         <div className="flex justify-between items-center mb-4">
-                            <h2 className="text-xl font-semibold">
+                            <h2 className="text-lg sm:text-xl lg:text-2xl font-semibold">
                                 {selectedUser.privacy
-                                    ? "Annonymous User"
+                                    ? "Anonymous User"
                                     : selectedUser.name}
                                 's Analytics
                             </h2>
                             <button
                                 onClick={closeModal}
-                                className="text-gray-600 text-xl"
+                                className="text-gray-600 text-xl sm:text-2xl"
                             >
                                 &times;
                             </button>
                         </div>
                         <div className="text-center mb-3">
-                            <img
-                                src={
-                                    selectedUser.privacy
-                                        ? DEFAULT_AVATAR_URL
-                                        : selectedUser.avatar
-                                }
-                                alt={selectedUser.name}
-                                className="w-14 h-16 rounded-full mx-auto mb-4"
-                            />
-                            <h3 className="text-lg font-medium">
+                            <div className="relative inline-block">
+                                <img
+                                    src={
+                                        selectedUser.privacy
+                                            ? DEFAULT_AVATAR_URL
+                                            : selectedUser.avatar
+                                    }
+                                    alt={selectedUser.name}
+                                    className="w-12 h-12 sm:w-16 sm:h-16 lg:w-20 lg:h-20 rounded-full mx-auto"
+                                />
+                                {activeUsers?.includes(selectedUser._id) && (
+                                    <span
+                                        className="absolute bottom-0 right-0 w-2 h-2 sm:w-3 sm:h-3 lg:w-4 lg:h-4 bg-green-500 rounded-full border border-white"
+                                        title="Active"
+                                    ></span>
+                                )}
+                            </div>
+                            <h3 className="text-base sm:text-lg lg:text-xl font-medium mt-2">
                                 {selectedUser.privacy
-                                    ? "Annonymous User"
+                                    ? "Anonymous User"
                                     : selectedUser.name}
                             </h3>
                             {selectedUser.privacy && (
-                                <small>
+                                <small className="text-xs sm:text-sm lg:text-base">
                                     This user has turned on her privacy settings
                                 </small>
                             )}
                         </div>
-
-                        {/* Single Values */}
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8 font-manrope">
-                            <div className="p-4  bg-gray-100 rounded shadow">
-                                <h3 className="font-bold mb-1">
+                        {/* Single Values Section */}
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8 font-manrope">
+                            <div className="p-4 bg-gray-100 rounded shadow">
+                                <h3 className="font-bold mb-1 text-sm sm:text-base lg:text-lg">
                                     Total Quizzes
                                 </h3>
-                                <p>
+                                <p className="text-sm sm:text-base lg:text-lg">
                                     {
                                         selectedUserAnalytics.singleValues
                                             .totalQuizzes
                                     }
                                 </p>
                             </div>
-                            <div className="p-4  bg-gray-100 rounded shadow">
-                                <h3 className="font-bold mb-1">
+                            <div className="p-4 bg-gray-100 rounded shadow">
+                                <h3 className="font-bold mb-1 text-sm sm:text-base lg:text-lg">
                                     Average Score
                                 </h3>
-                                <p>
+                                <p className="text-sm sm:text-base lg:text-lg">
                                     {
                                         selectedUserAnalytics.singleValues
                                             .averageScore
                                     }
                                 </p>
                             </div>
-                            <div className="p-4  bg-gray-100 rounded shadow">
-                                <h3 className="font-bold mb-1">
+                            <div className="p-4 bg-gray-100 rounded shadow">
+                                <h3 className="font-bold mb-1 text-sm sm:text-base lg:text-lg">
                                     Overall Accuracy
                                 </h3>
-                                <p>
+                                <p className="text-sm sm:text-base lg:text-lg">
                                     {
                                         selectedUserAnalytics.singleValues
                                             .overallAccuracy
@@ -416,11 +425,11 @@ const CommunityChat: React.FC = () => {
                                     %
                                 </p>
                             </div>
-                            <div className="p-4  bg-gray-100 rounded shadow">
-                                <h3 className="font-bold mb-1">
+                            <div className="p-4 bg-gray-100 rounded shadow">
+                                <h3 className="font-bold mb-1 text-sm sm:text-base lg:text-lg">
                                     Most Attempted Category
                                 </h3>
-                                <p>
+                                <p className="text-sm sm:text-base lg:text-lg">
                                     {
                                         selectedUserAnalytics.singleValues
                                             .mostAttemptedCategory
@@ -428,16 +437,15 @@ const CommunityChat: React.FC = () => {
                                 </p>
                             </div>
                         </div>
-
-                        {/* Top 5 Data */}
+                        {/* Top 5 Data Section */}
                         <div className="mb-8">
-                            <h3 className="text-lg font-semibold mb-2">
+                            <h3 className="text-base sm:text-lg lg:text-xl font-semibold mb-2">
                                 Top 5 Data
                             </h3>
-                            <div className="flex space-x-4 mb-4">
+                            <div className="flex flex-wrap gap-2 sm:gap-4 mb-4">
                                 <button
                                     onClick={() => setActiveTab("score")}
-                                    className={`px-4 py-2 h-20 ${
+                                    className={`px-4 py-2 text-sm sm:text-base lg:text-lg ${
                                         activeTab === "score"
                                             ? "bg-blue-500 text-white"
                                             : "bg-gray-200"
@@ -447,7 +455,7 @@ const CommunityChat: React.FC = () => {
                                 </button>
                                 <button
                                     onClick={() => setActiveTab("attempts")}
-                                    className={`px-4 py-2 h-20 ${
+                                    className={`px-4 py-2 text-sm sm:text-base lg:text-lg ${
                                         activeTab === "attempts"
                                             ? "bg-blue-500 text-white"
                                             : "bg-gray-200"
@@ -457,7 +465,7 @@ const CommunityChat: React.FC = () => {
                                 </button>
                                 <button
                                     onClick={() => setActiveTab("correct")}
-                                    className={`px-4 py-2 h-20 ${
+                                    className={`px-4 py-2 text-sm sm:text-base lg:text-lg ${
                                         activeTab === "correct"
                                             ? "bg-blue-500 text-white"
                                             : "bg-gray-200"
@@ -470,8 +478,6 @@ const CommunityChat: React.FC = () => {
                                 {renderTop5Content()}
                             </div>
                         </div>
-
-                        {/* Chart Section */}
                     </div>
                 </div>
             )}
