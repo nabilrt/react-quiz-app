@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import { quiz_data } from "../data/data"; // Assume quiz_data is typed as Quiz[]
-import { Quiz, Category } from "../data/types"; // Import types if placed in a separate file
+
+import {Category } from "../data/types"; // Import types if placed in a separate file
 import OptionCard from "../components/OptionCard";
 import QuizCategorySelection from "../components/QuizCategorySelection";
 import TimerProgress from "../components/TimerProgress";

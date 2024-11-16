@@ -1,7 +1,7 @@
 import { useRef, useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { CgProfile } from "react-icons/cg";
-import { useLocation, useNavigate } from "react-router-dom";
+import {  useNavigate } from "react-router-dom";
 import Header from "../components/Header";
 import { registerUser } from "../lib/api";
 
