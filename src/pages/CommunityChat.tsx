@@ -344,7 +344,7 @@ const CommunityChat: React.FC = () => {
                 </button>
             </div>
             {showModal && selectedUserAnalytics && selectedUser && (
-                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+                <div className="fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center z-50">
                     <div className="bg-white rounded-lg p-6 w-full max-w-lg sm:max-w-xl lg:max-w-4xl mx-4 sm:mx-8 lg:mx-auto overflow-y-auto max-h-screen">
                         <div className="flex justify-between items-center mb-4">
                             <h2 className="text-lg sm:text-xl lg:text-2xl font-semibold">
