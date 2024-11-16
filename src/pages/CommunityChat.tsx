@@ -47,13 +47,13 @@ interface UserAnalytics {
     };
 }
 // Initialize socket connection
-const socketInstance = io("http://localhost:9000"); // Replace with your backend's URL
 
 const DEFAULT_AVATAR_URL =
     "https://res.cloudinary.com/ddedulzz1/image/upload/v1729602082/ze1tjbf1plkctqgzn8zz.png";
 const CommunityChat: React.FC = () => {
     const [messages, setMessages] = useState<Message[]>([]);
     const [newMessage, setNewMessage] = useState<string>("");
+    const [activeUsers, setActiveUsers] = useState<string[] | null>([]);
     const [showSplash, setShowSplash] = useState<boolean>(true);
     const [progress, setProgress] = useState<number>(0);
     const [selectedUserAnalytics, setSelectedUserAnalytics] =
@@ -87,6 +87,8 @@ const CommunityChat: React.FC = () => {
     useEffect(() => {
         if (showSplash) return;
 
+        const socketInstance = io("http://localhost:9000"); // Replace with your backend's URL
+
         // Listen for incoming messages
         socketInstance.on("new_message", (data: { message: Message }) => {
             console.log(data);
@@ -114,6 +116,25 @@ const CommunityChat: React.FC = () => {
     }, [showSplash]);
 
     useEffect(() => {
+        if (showSplash || !user?._id) return;
+
+        const socket = io("http://localhost:9000"); // Replace with your backend's URL
+
+        // Emit user connection after establishing the socket connection
+        socket.emit("userConnected", user._id);
+
+        // Listen for the updated list of active users
+        socket.on("activeUsers", (users) => {
+            setActiveUsers(users);
+        });
+
+        // Clean up the socket connection and listeners when the component unmounts
+        return () => {
+            socket.disconnect();
+        };
+    }, [showSplash, user?._id]);
+
+    useEffect(() => {
         // Scroll to the bottom whenever messages update
         chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
     }, [messages]);
@@ -126,8 +147,7 @@ const CommunityChat: React.FC = () => {
                 userId: user?._id, // Replace with logged-in user's ID
                 message: newMessage.trim(),
             };
-            const response = await sendMessage(payload);
-            setMessages([...messages, response.data.data]);
+            await sendMessage(payload);
             setNewMessage(""); // Clear input field
         } catch (error) {
             console.error("Error sending message:", error);
@@ -259,16 +279,25 @@ const CommunityChat: React.FC = () => {
                         }`}
                     >
                         {msg.userId._id !== user?._id && (
-                            <img
-                                src={
-                                    msg.userId.privacy
-                                        ? DEFAULT_AVATAR_URL
-                                        : msg.userId.avatar
-                                }
-                                alt={msg.userId.name}
-                                className="w-8 h-8 rounded-full mr-2 cursor-pointer"
-                                onClick={() => handleUserClick(msg.userId)}
-                            />
+                            <div className="relative inline-block">
+                                <img
+                                    src={
+                                        msg.userId.privacy
+                                            ? DEFAULT_AVATAR_URL
+                                            : msg.userId.avatar
+                                    }
+                                    alt={msg.userId.name}
+                                    className="w-8 h-8 rounded-full mr-2 cursor-pointer"
+                                    onClick={() => handleUserClick(msg.userId)}
+                                />
+                                {/* Show active icon if user is in activeUsers */}
+                                {activeUsers?.includes(msg.userId._id) && (
+                                    <span
+                                        className="absolute bottom-0 right-0 w-2 h-2 bg-green-500 rounded-full border border-white"
+                                        title="Active"
+                                    ></span>
+                                )}
+                            </div>
                         )}
                         <div
                             className={`p-2 rounded-lg ${
